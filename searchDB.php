@@ -13,7 +13,10 @@ if (isset($_REQUEST["letter"])) {
         . "<select name=cities size = $size>";
 
         foreach ($entries as $value) {
-            echo "<option value=$value->city onclick=changeFunc(value);>$value->city</option>";
+            
+            $temp = $value->city;
+            var_dump($temp);
+            echo "<option value=$temp onclick=changeFunc(value);>$temp</option>";
         }
         echo "</select>
            
