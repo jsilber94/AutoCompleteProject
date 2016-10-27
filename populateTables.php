@@ -1,9 +1,9 @@
 <?php
 
 setUpTable();
-readFile();
+readTheFile();
 
-function readFile() {
+function readTheFile() {
     $file = 'cities.txt';
 
     $handle = fopen($file, "r");

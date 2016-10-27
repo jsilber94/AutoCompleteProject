@@ -30,8 +30,32 @@
             }
 
             function changeFunc(value) {
-                alert(value);
+                
+              document.getElementById("cityName").value = value;
+       
 
+            }
+            
+            function enter(value){
+                
+                var city = document.getElementById("cityName").value;
+                
+                 var xmlhttp = new XMLHttpRequest();
+
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        
+                        
+                        document.getElementById("output").innerHTML = this.responseText;
+                    }
+                };
+
+                xmlhttp.open("GET", "searchDB.php?city=" + city, true);
+                xmlhttp.send();
+
+                
+                
+                
             }
         </script>
     </head>
@@ -39,19 +63,39 @@
 
 
 </script>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+}
 
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
 </head>
 <body>
+    
 
     Please enter City Name <br><br>
     <input id = "cityName" type="text" name="cityname" onkeydown="keyPress(event)">
 
     <div id="txtHint"></div>
 
-    <form>
-        <input type=submit value=Submit>
-    </form>
+   
+        
+    <input type=submit value=Submit onmousedown="enter()">
+   
 
+    <div id ="output"></div>
+    
+    
 </body>
 </html>
 
