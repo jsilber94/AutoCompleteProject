@@ -89,7 +89,17 @@ function setUpTable() {
                 cityName varchar(255) not null,
                 population INT(7) not null)';
         $pdo->exec($sql);
-        echo 'Table Created';
+        echo 'Cities Table Created';
+        
+            $sql = 'CREATE TABLE Users(
+                id int not null auto_increment primary key,
+                user varchar(255) not null,
+                pass varchar(255) not null,
+                counter int(1))';
+        $pdo->exec($sql);
+        echo 'Users Table Created';
+        
+        
     } catch (PDOException $e) {
         echo $e->getMessage();
     } finally {
