@@ -105,8 +105,8 @@ if (isset($_REQUEST["city"])) {
 
 
 
-        var_dump($var1);
-        var_dump($var2);
+       // var_dump($var1);
+       // var_dump($var2);
 
 
 
@@ -118,7 +118,7 @@ if (isset($_REQUEST["city"])) {
 
         $row = $stmt->fetch();
         $city = new City($row["countryName"], $row["provinceName"], $row["cityName"], $row["population"]);
-        var_dump($city);
+    //    var_dump($city);
         echo "<table><tr><th>Country Name</th><th>Province Name</th><th>City Name</th><th>Population</th></tr>";
         echo "<tr><td>$city->country</td><td>$city->province</td><td>$city->city</td><td>$city->pop</td></tr>";
         echo "</table>";

@@ -101,6 +101,18 @@ function setUpTable() {
         echo 'Users Table Created';
         
         
+        $sql = 'CREATE TABLE UserHistory(
+            id int not null,
+            search1 varchar(255) not null,
+            search2 varchar(255) not null,
+            search3 varchar(255) not null,
+            search4 varchar(255) not null,            
+            PRIMARY KEY (id),
+            FOREIGN KEY (id) REFERENCES Users(id) ON DELETE CASCADE)';
+        $pdo->exec($sql);
+        echo 'UserHistory Table Created';
+        
+        
     } catch (PDOException $e) {
         echo $e->getMessage();
     } finally {

@@ -39,23 +39,79 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
     $user = $_POST['username'];
     $pass = $_POST['password'];
     checkUniqueUsername($user);
-    if(checkUniqueUsername($user) == 1)
+    if (checkUniqueUsername($user) == 1)
         echo "Username or Password is invalid. Please try again";
-    else{
-        createNewUser($user,$pass);   
+    else {
+        createNewUser($user, $pass);
     }
-       
-    
 } else if (isset($_POST['action']) == true && $_POST['action'] == 'login') {
     $user = $_POST['username'];
     $pass = $_POST['password'];
-    
-    
+    $temp = checkLoginAndPassword($user, $pass);
+  
+    if ($temp == "logged in"){
+        //logged in so create session
+        
+        session_start();  
+        session_regenerate_id();
+        $_SESSION['user'] = $user;
+        
+        header( 'Location: search.php') ;
+    }
+    else
+        echo $temp;
 }
 
-function checkLoginAndPassword(){
-    
-    
+function checkLoginAndPassword($username, $pass) {
+    try {
+
+        $user = 'homestead';
+        $password = 'secret';
+        $dataSourceName = 'mysql:host=localhost;dbname=cities';
+        $pdo = new PDO($dataSourceName, $user, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $stmt = $pdo->prepare("SELECT counter from Users where user = ?");
+        $stmt->bindParam(1, $username);
+        if ($stmt->execute()) {
+            $row = $stmt->fetch();
+            if ($row != null) {
+                if ($row['counter'] == 3)
+                    return "User has execced the number of attempts";
+                else
+                    $counter = $row['counter'];
+            }
+        }
+
+        //check counter
+
+
+        $stmt = $pdo->prepare("SELECT id,counter from Users where user = ? and pass = ?");
+
+        $stmt->bindParam(1, $username);
+        $stmt->bindParam(2, $pass);
+
+        if ($stmt->execute()) {
+
+            $row = $stmt->fetch();
+            if ($row != null) {
+
+                return "logged in";
+            } else {
+                $stmt = $pdo->prepare("UPDATE Users set counter = ? where user = ?");
+                $stmt->bindValue(1, $counter + 1);
+                $stmt->bindValue(2, $username);
+                $stmt->execute();
+
+                
+                return "Username or Password is invalid. Please try again";;
+            }
+        }
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    } finally {
+        unset($pdo);
+    }
 }
 
 function checkUniqueUsername($var) {
@@ -88,7 +144,7 @@ function checkUniqueUsername($var) {
     }
 }
 
-function createNewUser($username,$pass){
+function createNewUser($username, $pass) {
     try {
 
         $user = 'homestead';
@@ -101,14 +157,22 @@ function createNewUser($username,$pass){
 
         $stmt->bindValue(1, $username);
         $stmt->bindValue(2, $pass);
-    
-
 
         $stmt->execute();
+        
+        echo mysql_insert_id($stmt + "");
+       // $stmt->$pdo->prepare("insert into UserHistory(id) Values(?)");
+       // $stmt->bindValue(1, $id);
+
+      //  $stmt->execute();
+        
+        
+        
+        
+        
     } catch (PDOException $e) {
         echo $e->getMessage();
     } finally {
         unset($pdo);
     }
-    
 }
