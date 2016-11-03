@@ -28,23 +28,30 @@
             }
 
             function changeFunc() {
-                
+
                 var value = document.getElementById("test").value;
-              document.getElementById("cityName").value = value;
-       
+
+                document.getElementById("cityName").value = value;
 
             }
-            
-            function enter(value){
-                
+            function changeFuncForHistory() {
+
+                var value = document.getElementById("test2").value;
+
+                document.getElementById("cityName").value = value;
+
+            }
+
+            function enter(value) {
+
                 var city = document.getElementById("cityName").value;
-                
-                 var xmlhttp = new XMLHttpRequest();
+
+                var xmlhttp = new XMLHttpRequest();
 
                 xmlhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
-                        
-                        
+
+
                         document.getElementById("output").innerHTML = this.responseText;
                     }
                 };
@@ -52,27 +59,27 @@
                 xmlhttp.open("GET", "searchDB.php?city=" + city, true);
                 xmlhttp.send();
 
-                
-                
-                
+
+
+
             }
-            
-            function printHistory(){
-                 var xmlhttp = new XMLHttpRequest();
+
+            function printHistory() {
+                var xmlhttp = new XMLHttpRequest();
 
                 xmlhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
-                        
-                        
+
+
                         document.getElementById("history").innerHTML = this.responseText;
                     }
                 };
 
                 xmlhttp.open("GET", "searchDB.php?history=return", true);
                 xmlhttp.send();
-                
+
             }
-            window.onload= printHistory;
+            window.onload = printHistory;
         </script>
     </head>
 
@@ -80,26 +87,26 @@
 
 </script>
 <style>
-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-}
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+    }
 
-td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
-}
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
 </style>
 </head>
 <body>
-    
 
-    
+
+
     Your last five searches<br><br>
     <div id ="history"></div>
     Please enter City Name <br><br>
@@ -109,11 +116,11 @@ tr:nth-child(even) {
 
 
     <input type=submit value=Submit onmousedown="enter()">
-   
+
 
     <div id ="output"></div>
-    
-    
+
+
 </body>
 </html>
 

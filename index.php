@@ -55,9 +55,8 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
 
         session_start();
         session_regenerate_id();
-        $_SESSION['user'] = "test";
-        $_SESSION['time'] = time();
-        $_COOKIE['test'] = "test";
+        $_SESSION['user'] = $user;
+        $_SESSION['time'] = time();   
         header('Location: search.php');
         
         

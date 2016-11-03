@@ -209,7 +209,7 @@ function returnHistory() {
 
         if ($stmt->execute()) {
 
-            echo "<select name=temp id=test onchange = changeFunc() size = 4>";
+            echo "<select name=temp id=test2 onchange = changeFuncForHistory() size = 4>";
             echo "<option value='' disabled selected style=display:none;></option>";
 
             $row = $stmt->fetch();
@@ -227,12 +227,12 @@ function returnHistory() {
 
 
             echo "</select>";
-
+ var_dump($username);
           
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
-        var_dump($e);
+       
     } finally {
         unset($pdo);
     }
