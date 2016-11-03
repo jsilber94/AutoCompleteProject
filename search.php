@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html>
-
-
     <head>
 
         <script>
@@ -29,8 +27,9 @@
 
             }
 
-            function changeFunc(value) {
+            function changeFunc() {
                 
+                var value = document.getElementById("test").value;
               document.getElementById("cityName").value = value;
        
 
