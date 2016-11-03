@@ -39,8 +39,9 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
     $user = $_POST['username'];
     $pass = $_POST['password'];
     checkUniqueUsername($user);
-    if (checkUniqueUsername($user) == 1)
+    if (checkUniqueUsername($user) == 1){
         echo "Username or Password is invalid. Please try again";
+    }
     else {
         createNewUser($user, $pass);
     }
@@ -48,17 +49,20 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
     $user = $_POST['username'];
     $pass = $_POST['password'];
     $temp = checkLoginAndPassword($user, $pass);
-  
-    if ($temp == "logged in"){
+
+    if ($temp == "logged in") {
         //logged in so create session
-        
-        session_start();  
+
+        session_start();
         session_regenerate_id();
-        $_SESSION['user'] = $user;
+        $_SESSION['user'] = "test";
+        $_SESSION['time'] = time();
+        $_COOKIE['test'] = "test";
+        header('Location: search.php');
         
-        header( 'Location: search.php') ;
-    }
-    else
+        
+        
+    } else
         echo $temp;
 }
 
@@ -80,8 +84,10 @@ function checkLoginAndPassword($username, $pass) {
                     return "User has execced the number of attempts";
                 else
                     $counter = $row['counter'];
-            }
-        }
+            } else
+                $counter = -1;
+        } else
+            $counter = -1;
 
         //check counter
 
@@ -103,8 +109,9 @@ function checkLoginAndPassword($username, $pass) {
                 $stmt->bindValue(2, $username);
                 $stmt->execute();
 
+
+                return "Username or Password is invalid. Please try again";
                 
-                return "Username or Password is invalid. Please try again";;
             }
         }
     } catch (PDOException $e) {
@@ -154,22 +161,27 @@ function createNewUser($username, $pass) {
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $stmt = $pdo->prepare("insert into Users (user,pass) Values(?,?)");
-
         $stmt->bindValue(1, $username);
         $stmt->bindValue(2, $pass);
-
         $stmt->execute();
-        
-        echo mysql_insert_id($stmt + "");
-       // $stmt->$pdo->prepare("insert into UserHistory(id) Values(?)");
-       // $stmt->bindValue(1, $id);
 
-      //  $stmt->execute();
+        $stmt = $pdo->prepare("Select id from Users where user = ?");
+        $stmt->bindValue(1, $username);
+        $stmt->execute();
+        $row = $stmt->fetch();
+        $id = $row['id'];
+
+     
+        $stmt = $pdo->prepare("insert into UserHistory (id,search1,search2,search3,search4) Values(?,?,?,?,?)");
+        $stmt->bindValue(1, $id);
+        $stmt->bindValue(2, " ");
+        $stmt->bindValue(3, " ");
+        $stmt->bindValue(4, " ");
+        $stmt->bindValue(5, " ");
         
         
         
-        
-        
+        $stmt->execute();
     } catch (PDOException $e) {
         echo $e->getMessage();
     } finally {

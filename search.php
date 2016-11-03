@@ -56,6 +56,23 @@
                 
                 
             }
+            
+            function printHistory(){
+                 var xmlhttp = new XMLHttpRequest();
+
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        
+                        
+                        document.getElementById("history").innerHTML = this.responseText;
+                    }
+                };
+
+                xmlhttp.open("GET", "searchDB.php?history=return", true);
+                xmlhttp.send();
+                
+            }
+            window.onload= printHistory;
         </script>
     </head>
 
@@ -82,13 +99,15 @@ tr:nth-child(even) {
 <body>
     
 
+    
+    Your last five searches<br><br>
+    <div id ="history"></div>
     Please enter City Name <br><br>
     <input id = "cityName" type="text" name="cityname" onkeydown="keyPress(event)">
 
     <div id="txtHint"></div>
 
-   
-        
+
     <input type=submit value=Submit onmousedown="enter()">
    
 

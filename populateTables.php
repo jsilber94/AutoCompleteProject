@@ -71,7 +71,7 @@ function setUpTable() {
 
         $sql = "CREATE database cities";
         $pdo->exec($sql);
-        echo 'Database Created';
+        echo 'Database Created /n';
 
         $dataSourceName = 'mysql:host=localhost;dbname=cities';
         $pdo = new PDO($dataSourceName, $user, $password);
@@ -79,7 +79,19 @@ function setUpTable() {
 
         $sql = "drop table if exists cities";
         $pdo->exec($sql);
-        echo 'Table dropped';
+        echo 'Cities Table dropped /n';
+        
+         $sql = "drop table if exists UserHistory";
+        $pdo->exec($sql);
+        echo 'UserHistory Table dropped /n';
+        
+        $sql = "drop table if exists Users";
+        $pdo->exec($sql);
+        echo 'Users Table dropped /n';
+
+       
+
+
 
 
         $sql = 'CREATE TABLE cities(
@@ -89,24 +101,24 @@ function setUpTable() {
                 cityName varchar(255) not null,
                 population INT(7) not null)';
         $pdo->exec($sql);
-        
         echo 'Cities Table Created';
-        
-            $sql = 'CREATE TABLE Users(
+
+        $sql = 'CREATE TABLE Users(
                 id int not null auto_increment primary key,
                 user varchar(255) not null,
                 pass varchar(255) not null,
-                counter int(1) default 0)';
+                counter int(1) not null default 0)';
         $pdo->exec($sql);
         echo 'Users Table Created';
-        
-        
+
+
         $sql = 'CREATE TABLE UserHistory(
             id int not null,
             search1 varchar(255) not null,
             search2 varchar(255) not null,
             search3 varchar(255) not null,
-            search4 varchar(255) not null,            
+            search4 varchar(255) not null, 
+            counter int(1) not null default 1,
             PRIMARY KEY (id),
             FOREIGN KEY (id) REFERENCES Users(id) ON DELETE CASCADE)';
         $pdo->exec($sql);
