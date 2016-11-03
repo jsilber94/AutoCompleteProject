@@ -150,12 +150,27 @@ function addToHistory($city) {
         $row = $stmt->fetch();
         $id = $row['id'];
 
-        //var_dump($id);
-        $stmt = $pdo->prepare("SELECT counter from UserHistory where id = ?");
+
+
+
+
+
+
+
+        $stmt = $pdo->prepare("SELECT * from UserHistory where id = ?");
         $stmt->bindParam(1, $id);
         $stmt->execute();
         $row = $stmt->fetch();
         $counter = $row['counter'];
+
+        $history = array($row["search1"], $row["search2"], $row["search3"], $row["search4"]);
+
+        foreach ($history as $var) {
+            if ($var == $city) {
+                return "";
+            }
+        }
+
 
         if ($counter == 4) {
             $counter = 1;
@@ -227,12 +242,9 @@ function returnHistory() {
 
 
             echo "</select>";
- var_dump($username);
-          
         }
     } catch (PDOException $e) {
         echo $e->getMessage();
-       
     } finally {
         unset($pdo);
     }
