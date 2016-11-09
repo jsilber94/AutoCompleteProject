@@ -44,6 +44,11 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
     }
     else {
         createNewUser($user, $pass);
+         session_start();
+        session_regenerate_id();
+        $_SESSION['user'] = $user;
+        $_SESSION['time'] = time();   
+        header('Location: search.php');
     }
 } else if (isset($_POST['action']) == true && $_POST['action'] == 'login') {
     $user = $_POST['username'];
@@ -100,7 +105,7 @@ function checkLoginAndPassword($username, $pass) {
 
             $row = $stmt->fetch();
             if ($row != null) {
-
+                    
                 return "logged in";
             } else {
                 $stmt = $pdo->prepare("UPDATE Users set counter = ? where user = ?");

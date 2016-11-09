@@ -1,9 +1,12 @@
+
 <!DOCTYPE html>
 <html>
     <head>
 
         <script>
 
+
+            //based on the letter being typed
             function keyPress(e) {
                 if (e.keyCode === 8) {
                     var letter = document.getElementById('cityName').value;
@@ -34,6 +37,7 @@
                 document.getElementById("cityName").value = value;
 
             }
+            
             function changeFuncForHistory() {
 
                 var value = document.getElementById("test2").value;
@@ -59,9 +63,6 @@
                 xmlhttp.open("GET", "searchDB.php?city=" + city, true);
                 xmlhttp.send();
 
-
-
-
             }
 
             function printHistory() {
@@ -69,8 +70,7 @@
 
                 xmlhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
-
-
+                          
                         document.getElementById("history").innerHTML = this.responseText;
                     }
                 };
@@ -79,10 +79,28 @@
                 xmlhttp.send();
 
             }
+
+            function logout() {
+                var xmlhttp = new XMLHttpRequest();
+
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+
+                        var link = this.responseText;
+                        //alert(link);
+                      window.location.href = link;
+                    }
+                };
+
+                xmlhttp.open("GET", "searchDB.php?logout=logout", true);
+                xmlhttp.send();
+
+            }
+
+
             window.onload = printHistory;
         </script>
     </head>
-
 
 
 </script>
@@ -103,9 +121,11 @@
     }
 </style>
 </head>
+
 <body>
 
-
+    <input id ="logout" type="submit" value ="Logout" onmousedown="logout()">
+    <br><br>
 
     Your last five searches<br><br>
     <div id ="history"></div>
@@ -123,6 +143,11 @@
 
 </body>
 </html>
-
-
-
+<?php
+//they dont have a session
+session_start();
+if (!isset($_SESSION['user'])) {
+    header('Location: index.php');
+} else { //if they do
+    session_regenerate_id();
+}
