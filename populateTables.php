@@ -37,9 +37,9 @@ function readTheFile() {
 function insertIntoTable($pop, $city, $province = "", $country) {
 
     try {
-        $user = 'homestead';
-        $password = 'secret';
-        $dataSourceName = 'mysql:host=localhost;dbname=cities';
+        $user = 'CS1133611';
+        $password = 'brestlat';
+        $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
         $pdo = new PDO($dataSourceName, $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -63,17 +63,17 @@ function insertIntoTable($pop, $city, $province = "", $country) {
 function setUpTable() {
 
     try {
-        $user = 'homestead';
-        $password = 'secret';
-        $dataSourceName = 'mysql:host=localhost';
+        $user = 'CS1133611';
+        $password = 'brestlat';
+        $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca';
         $pdo = new PDO($dataSourceName, $user, $password);
 
-
+/*
         $sql = "CREATE database cities";
         $pdo->exec($sql);
         echo 'Database Created /n';
-
-        $dataSourceName = 'mysql:host=localhost;dbname=cities';
+*/
+        $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
         $pdo = new PDO($dataSourceName, $user, $password);
 
 

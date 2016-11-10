@@ -51,9 +51,9 @@ else if (isset($_REQUEST["city"])) {
 
 
 
-        $user = 'homestead';
-        $password = 'secret';
-        $dataSourceName = 'mysql:host=localhost;dbname=cities';
+        $user = 'CS1133611';
+        $password ='brestlat';
+        $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
         $pdo = new PDO($dataSourceName, $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -108,9 +108,9 @@ function findEntries($var) {
     try {
 
 
-        $user = 'homestead';
-        $password = 'secret';
-        $dataSourceName = 'mysql:host=localhost;dbname=cities';
+        $user = 'CS1133611';
+        $password ='brestlat';
+        $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
         $pdo = new PDO($dataSourceName, $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -145,9 +145,9 @@ function addToHistory($city) {
     $username = $_SESSION['user'];
 
     try {
-        $user = 'homestead';
-        $password = 'secret';
-        $dataSourceName = 'mysql:host=localhost;dbname=cities';
+        $user = 'CS1133611';
+        $password ='brestlat';
+        $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
         $pdo = new PDO($dataSourceName, $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $stmt = $pdo->prepare("SELECT id from Users where user = ?");
@@ -208,9 +208,9 @@ function returnHistory() {
     $username = $_SESSION['user'];
 
     try {
-        $user = 'homestead';
-        $password = 'secret';
-        $dataSourceName = 'mysql:host=localhost;dbname=cities';
+        $user = 'CS1133611';
+        $password ='brestlat';
+        $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
         $pdo = new PDO($dataSourceName, $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -241,7 +241,7 @@ function returnHistory() {
 
             
             if ($first == " " && $second == " " && $third == " " && $fourth == " " ) {
-                echo "No history";
+                echo "<h2>No history</h2>";
             } else {
 
                 echo "<select name=temp id=test2 onchange = changeFuncForHistory() size = 4>";

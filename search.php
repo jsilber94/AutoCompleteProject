@@ -1,11 +1,7 @@
-
 <!DOCTYPE html>
 <html>
     <head>
-
         <script>
-
-
             //based on the letter being typed
             function keyPress(e) {
                 if (e.keyCode === 8) {
@@ -29,7 +25,6 @@
                 xmlhttp.send();
 
             }
-
             function changeFunc() {
 
                 var value = document.getElementById("test").value;
@@ -37,7 +32,6 @@
                 document.getElementById("cityName").value = value;
 
             }
-            
             function changeFuncForHistory() {
 
                 var value = document.getElementById("test2").value;
@@ -62,7 +56,6 @@
 
                 xmlhttp.open("GET", "searchDB.php?city=" + city, true);
                 xmlhttp.send();
-
             }
 
             function printHistory() {
@@ -70,11 +63,10 @@
 
                 xmlhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
-                          
+
                         document.getElementById("history").innerHTML = this.responseText;
                     }
                 };
-
                 xmlhttp.open("GET", "searchDB.php?history=return", true);
                 xmlhttp.send();
 
@@ -88,48 +80,57 @@
 
                         var link = this.responseText;
                         //alert(link);
-                      window.location.href = link;
+                        window.location.href = link;
                     }
                 };
 
                 xmlhttp.open("GET", "searchDB.php?logout=logout", true);
                 xmlhttp.send();
-
             }
-
-
             window.onload = printHistory;
         </script>
     </head>
 
 
 </script>
-<style>
-    table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-    }
-
+<style> 
     td, th {
         border: 1px solid #dddddd;
         text-align: left;
         padding: 8px;
+        color:white
+    }
+    body {
+        background-image: url("background.jpg");
+    }
+    h2{
+        color:white;
+    }
+    #right{
+        text-align: right;
+    }
+    html{
+        text-align: center;
+    }
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        color:black;
+        margin:0 auto;
     }
 
-    tr:nth-child(even) {
-        background-color: #dddddd;
-    }
 </style>
 </head>
 
 <body>
-
-    <input id ="logout" type="submit" value ="Logout" onmousedown="logout()">
+    <div id ='right'>
+        <input id ="logout" type="submit" value ="Logout" onmousedown="logout()" class = logout>
+    </div>
     <br><br>
 
-    Your last five searches<br><br>
+    <h2>Your last five searches</h2><br><br>
     <div id ="history"></div>
-    Please enter City Name <br><br>
+    <h2>Please enter City Name</h2> <br><br>
     <input id = "cityName" type="text" name="cityname" onkeydown="keyPress(event)">
 
     <div id="txtHint"></div>
@@ -143,8 +144,8 @@
 
 </body>
 </html>
+
 <?php
-//they dont have a session
 session_start();
 if (!isset($_SESSION['user'])) {
     header('Location: index.php');
