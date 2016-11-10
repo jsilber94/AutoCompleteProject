@@ -1,61 +1,3 @@
-<!DOCTYPE html>
-<html>
-    <header>
-        <style>
-            body {
-                background-image: url("background.jpg");
-                background-color: #cccccc;
-            }
-            #login,#register{
-                color: white;
-                text-align: center;
-            }
-            h2,h1{
-                color:white;
-                text-align: center;
-            }
-        </style>
-
-    </header>
-    <body>
-        <br>
-        <h1>Welcome to Jesse's Auto Complete </h1>
-        <br><br><br><br><br><br><br>
-        <h2>Login</h2>
-        <form action="" method = "post" id = login>
-            User name:
-            <input type="text" name="username">
-            <br><br>
-            Password:
-            <input type="password" name="password">
-            <br><br>
-            <input type="hidden" name="action" value="login">
-            <input type="submit" value="Login">
-        </form>
-
-        <br><br><br><br><br>
-
-        <h2> Register </h2>
-
-        <form action="" method = "post" id = register>
-            User name:
-            <input type="text" name="username">
-            <br><br>
-            Password:
-            <input type="password" name="password">
-            <br><br>
-            <input type="hidden" name="action" value="register">
-
-            <input type="submit" value="Register">
-        </form>
-        
-        <br><br><br><br>
-
-
-    </body>      
-</html>
-
-
 <?php
 if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
 
@@ -70,6 +12,7 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
         session_regenerate_id();
         $_SESSION['user'] = $user;
         $_SESSION['time'] = time();
+        
         header('Location: search.php');
     }
 } else if (isset($_POST['action']) == true && $_POST['action'] == 'login') {
@@ -84,7 +27,7 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
         session_regenerate_id();
         $_SESSION['user'] = $user;
         $_SESSION['time'] = time();
-        header('Location: search.php');
+        header('Location:search.php');
     } else
         echo $temp;
 }
@@ -112,20 +55,35 @@ function checkLoginAndPassword($username, $pass) {
         } else
             $counter = -1;
 
-        //check counter
+        //check counter ^
 
-
-        $stmt = $pdo->prepare("SELECT id,counter from Users where user = ? and pass = ?");
+            
+        $stmt = $pdo->prepare("SELECT id,counter,pass from Users where user = ?");
 
         $stmt->bindParam(1, $username);
-        $stmt->bindParam(2, $pass);
+        
 
         if ($stmt->execute()) {
 
             $row = $stmt->fetch();
             if ($row != null) {
 
-                return "logged in";
+                //check password
+                
+                $passFromDB = $row[pass];
+                
+                if(password_verify($pass, $passFromDB)){
+                    return "logged in";
+                }
+                else
+                {
+                     return "<h2>Username or Password is invalid. Please try again</h2>";
+                }
+                
+                
+                
+                
+                
             } else {
                 $stmt = $pdo->prepare("UPDATE Users set counter = ? where user = ?");
                 $stmt->bindValue(1, $counter + 1);
@@ -184,7 +142,9 @@ function createNewUser($username, $pass) {
 
         $stmt = $pdo->prepare("insert into Users (user,pass) Values(?,?)");
         $stmt->bindValue(1, $username);
-        $stmt->bindValue(2, $pass);
+        
+        $hash = password_hash($pass,PASSWORD_DEFAULT);
+        $stmt->bindValue(2, $hash);
         $stmt->execute();
 
         $stmt = $pdo->prepare("Select id from Users where user = ?");
@@ -210,3 +170,60 @@ function createNewUser($username, $pass) {
         unset($pdo);
     }
 }
+?>
+<!DOCTYPE html>
+<html>
+    <header>
+        <style>
+            body {
+                background-image: url("background.jpg");
+                background-color: #cccccc;
+            }
+            #login,#register{
+                color: white;
+                text-align: center;
+            }
+            h2,h1{
+                color:white;
+                text-align: center;
+            }
+        </style>
+
+    </header>
+    <body>
+        <br>
+        <h1>Welcome to Jesse's Auto Complete </h1>
+        <br><br><br><br><br><br><br>
+        <h2>Login</h2>
+        <form action="" method = "post" id = login>
+            User name:
+            <input type="text" name="username">
+            <br><br>
+            Password:
+            <input type="password" name="password">
+            <br><br>
+            <input type="hidden" name="action" value="login">
+            <input type="submit" value="Login">
+        </form>
+
+        <br><br><br><br><br>
+
+        <h2> Register </h2>
+
+        <form action="" method = "post" id = register>
+            User name:
+            <input type="text" name="username">
+            <br><br>
+            Password:
+            <input type="password" name="password">
+            <br><br>
+            <input type="hidden" name="action" value="register">
+
+            <input type="submit" value="Register">
+        </form>
+        
+        <br><br><br><br>
+
+
+    </body>      
+</html>
