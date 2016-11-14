@@ -1,4 +1,4 @@
-?>
+
 <!DOCTYPE html>
 <html>
     <header>
@@ -25,10 +25,10 @@
         <h2>Login</h2>
         <form action="" method = "post" id = login>
             User name:
-            <input type="text" name="username">
+            <input type="text" name="username" maxlength="255">
             <br><br>
             Password:
-            <input type="password" name="password">
+            <input type="password" name="password" maxlength="255">
             <br><br>
             <input type="hidden" name="action" value="login">
             <input type="submit" value="Login">
@@ -40,10 +40,10 @@
 
         <form action="" method = "post" id = register>
             User name:
-            <input type="text" name="username">
+            <input type="text" name="username" maxlength="255">
             <br><br>
             Password:
-            <input type="password" name="password">
+            <input type="password" name="password" maxlength="255">
             <br><br>
             <input type="hidden" name="action" value="register">
 
@@ -62,7 +62,9 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
 
     $user = $_POST['username'];
     $pass = $_POST['password'];
-    checkUniqueUsername($user);
+		
+   // echo checkUniqueUsername($user);
+	
     if (checkUniqueUsername($user) == 1) {
         echo "<h2>Username or Password is invalid. Please try again</h2>";
     } else {
@@ -75,7 +77,8 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
         header('Location: search.php');
     }
 } else if (isset($_POST['action']) == true && $_POST['action'] == 'login') {
-    $user = $_POST['username'];
+   
+	$user = $_POST['username'];
     $pass = $_POST['password'];
     $temp = checkLoginAndPassword($user, $pass);
 
@@ -93,7 +96,12 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
 
 function checkLoginAndPassword($username, $pass) {
     try {
-
+		
+		if(strlen($username) == 0){
+				
+			 return "<h2>Username or Password is invalid. Please try again</h2>";
+		}
+		
         $user = 'CS1133611';
         $password = 'brestlat';
         $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
@@ -116,6 +124,7 @@ function checkLoginAndPassword($username, $pass) {
 
         //check counter ^
 
+		
 
         $stmt = $pdo->prepare("SELECT id,counter,pass from Users where user = ?");
 
@@ -151,6 +160,7 @@ function checkLoginAndPassword($username, $pass) {
 
             return "<h2>Username or Password is invalid. Please try again</h2>";
         }
+		     return "<h2>Username or Password is invalid. Please try again</h2>"; 
     } catch (PDOException $e) {
         echo $e->getMessage();
     } finally {
@@ -161,7 +171,11 @@ function checkLoginAndPassword($username, $pass) {
 function checkUniqueUsername($var) {
 
     try {
-
+				
+		if(strlen($var) == 0){
+			return 1;
+		}
+		
         $user = 'CS1133611';
         $password = 'brestlat';
         $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
@@ -195,7 +209,11 @@ function createNewUser($username, $pass) {
         $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
         $pdo = new PDO($dataSourceName, $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+		
+		$user = substr($user,0,255);
+		
+		
+		
         $stmt = $pdo->prepare("insert into Users (user,pass) Values(?,?)");
         $stmt->bindValue(1, $username);
 

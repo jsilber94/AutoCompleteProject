@@ -105,7 +105,7 @@ function setUpTable() {
 
         $sql = 'CREATE TABLE Users(
                 id int not null auto_increment primary key,
-                user varchar(255) not null,
+                user varchar(255) not null Unique,
                 pass varchar(255) not null,
                 counter int(1) not null default 0)';
         $pdo->exec($sql);
