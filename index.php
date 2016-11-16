@@ -62,12 +62,12 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
 
     $user = $_POST['username'];
     $pass = $_POST['password'];
-		
-   // echo checkUniqueUsername($user);
-	
+
+
+    
     if (checkUniqueUsername($user) == 1) {
         echo "<h2>Username or Password is invalid. Please try again</h2>";
-    } else {
+    } else {//creates user and logs in, session
         createNewUser($user, $pass);
         session_start();
         session_regenerate_id();
@@ -77,8 +77,8 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
         header('Location: search.php');
     }
 } else if (isset($_POST['action']) == true && $_POST['action'] == 'login') {
-   
-	$user = $_POST['username'];
+
+    $user = $_POST['username'];
     $pass = $_POST['password'];
     $temp = checkLoginAndPassword($user, $pass);
 
@@ -93,21 +93,24 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
     } else
         echo $temp;
 }
+/*
+ * Checks to see if the login and password match
+ */
 
 function checkLoginAndPassword($username, $pass) {
     try {
-		
-		if(strlen($username) == 0){
-				
-			 return "<h2>Username or Password is invalid. Please try again</h2>";
-		}
-		
+
+        if (strlen($username) == 0) {
+
+            return "<h2>Username or Password is invalid. Please try again</h2>";
+        }
+
         $user = 'CS1133611';
         $password = 'brestlat';
         $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
         $pdo = new PDO($dataSourceName, $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+        //checks attemps at login
         $stmt = $pdo->prepare("SELECT counter from Users where user = ?");
         $stmt->bindParam(1, $username);
         if ($stmt->execute()) {
@@ -124,14 +127,13 @@ function checkLoginAndPassword($username, $pass) {
 
         //check counter ^
 
-		
 
         $stmt = $pdo->prepare("SELECT id,counter,pass from Users where user = ?");
 
         $stmt->bindParam(1, $username);
 
 
-        if ($stmt->execute()) {
+        if ($stmt->execute()) {//if anything fails the ccounter needs to be updates to add 1
 
             $row = $stmt->fetch();
             if ($row != null) { //if username exists
@@ -139,10 +141,14 @@ function checkLoginAndPassword($username, $pass) {
                 $passFromDB = $row['pass'];
 
 
-                if (password_verify($pass, $passFromDB))  //wrong password
+                if (password_verify($pass, $passFromDB)) {  //right password so update coutner to 0
+                    $stmt = $pdo->prepare("UPDATE Users set counter = ? where user = ?");
+                    $stmt->bindValue(1, 0);
+                    $stmt->bindValue(2, $username);
+                    $stmt->execute();
                     return "logged in";
-            }
-            else {
+                }
+            } else {
                 $stmt = $pdo->prepare("UPDATE Users set counter = ? where user = ?");
                 $stmt->bindValue(1, $counter + 1);
                 $stmt->bindValue(2, $username);
@@ -160,7 +166,7 @@ function checkLoginAndPassword($username, $pass) {
 
             return "<h2>Username or Password is invalid. Please try again</h2>";
         }
-		     return "<h2>Username or Password is invalid. Please try again</h2>"; 
+        return "<h2>Username or Password is invalid. Please try again</h2>";
     } catch (PDOException $e) {
         echo $e->getMessage();
     } finally {
@@ -168,14 +174,19 @@ function checkLoginAndPassword($username, $pass) {
     }
 }
 
+/**
+ * Checks to see if Username is unique
+ * @param type $var
+ * @return boolean|int
+ */
 function checkUniqueUsername($var) {
 
     try {
-				
-		if(strlen($var) == 0){
-			return 1;
-		}
-		
+
+        if (strlen($var) == 0) {
+            return 1;
+        }
+
         $user = 'CS1133611';
         $password = 'brestlat';
         $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
@@ -201,19 +212,29 @@ function checkUniqueUsername($var) {
     }
 }
 
+/*
+ * Creates a new user based on username and password
+ */
+
 function createNewUser($username, $pass) {
     try {
+
+
+        $username = strip_tags($username);
+        $pass = strip_tags($pass);
+
+
 
         $user = 'CS1133611';
         $password = 'brestlat';
         $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
         $pdo = new PDO($dataSourceName, $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		
-		$user = substr($user,0,255);
-		
-		
-		
+
+        $user = substr($user, 0, 255);
+
+
+
         $stmt = $pdo->prepare("insert into Users (user,pass) Values(?,?)");
         $stmt->bindValue(1, $username);
 
@@ -239,6 +260,7 @@ function createNewUser($username, $pass) {
 
         $stmt->execute();
     } catch (PDOException $e) {
+        var_dump("hmm");
         echo $e->getMessage();
     } finally {
         unset($pdo);

@@ -25,6 +25,10 @@
                 xmlhttp.send();
 
             }
+            /**
+             * 
+             * Fills in the text box from the user typing
+             */
             function changeFunc() {
 
                 var value = document.getElementById("test").value;
@@ -32,6 +36,10 @@
                 document.getElementById("cityName").value = value;
 
             }
+            /*
+             * 
+             * Fills in the text box from the history
+             */
             function changeFuncForHistory() {
 
                 var value = document.getElementById("test2").value;
@@ -39,7 +47,9 @@
                 document.getElementById("cityName").value = value;
 
             }
-
+            /*
+             * When the user presses the submit button
+             */
             function enter(value) {
 
                 var city = document.getElementById("cityName").value;
@@ -57,7 +67,9 @@
                 xmlhttp.open("GET", "searchDB.php?city=" + city, true);
                 xmlhttp.send();
             }
-
+            /*
+             * Prints the users history
+             */
             function printHistory() {
                 var xmlhttp = new XMLHttpRequest();
 
@@ -71,7 +83,9 @@
                 xmlhttp.send();
 
             }
-
+            /*
+             * Closes down the session
+             */
             function logout() {
                 var xmlhttp = new XMLHttpRequest();
 
@@ -149,7 +163,6 @@
 session_start();
 if (!isset($_SESSION['user'])) {
     header('Location: index.php');
-} 
-else { //if they do
+} else { //if they do
     session_regenerate_id();
 }

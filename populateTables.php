@@ -3,6 +3,9 @@
 setUpTable();
 readTheFile();
 
+/**
+ * Reads the files and calls insert into table
+ */
 function readTheFile() {
     $file = 'cities.txt';
 
@@ -34,6 +37,9 @@ function readTheFile() {
     }
 }
 
+/**
+  *Inserts data into the table 
+ */
 function insertIntoTable($pop, $city, $province = "", $country) {
 
     try {
@@ -60,6 +66,9 @@ function insertIntoTable($pop, $city, $province = "", $country) {
     }
 }
 
+/**
+ * Creates the tables
+ */
 function setUpTable() {
 
     try {
@@ -68,29 +77,21 @@ function setUpTable() {
         $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca';
         $pdo = new PDO($dataSourceName, $user, $password);
 
-/*
-        $sql = "CREATE database cities";
-        $pdo->exec($sql);
-        echo 'Database Created /n';
-*/
         $dataSourceName = 'mysql:host=korra.dawsoncollege.qc.ca;dbname=CS1133611';
         $pdo = new PDO($dataSourceName, $user, $password);
 
 
         $sql = "drop table if exists cities";
         $pdo->exec($sql);
-        echo 'Cities Table dropped /n';
+        echo 'Cities Table dropped ';
         
          $sql = "drop table if exists UserHistory";
         $pdo->exec($sql);
-        echo 'UserHistory Table dropped /n';
+        echo 'UserHistory Table dropped ';
         
         $sql = "drop table if exists Users";
         $pdo->exec($sql);
-        echo 'Users Table dropped /n';
-
-       
-
+        echo 'Users Table dropped ';
 
 
 
@@ -118,6 +119,7 @@ function setUpTable() {
             search2 varchar(255) not null,
             search3 varchar(255) not null,
             search4 varchar(255) not null, 
+            search5 varchar(255) not null, 
             counter int(1) not null default 1,
             PRIMARY KEY (id),
             FOREIGN KEY (id) REFERENCES Users(id) ON DELETE CASCADE)';
