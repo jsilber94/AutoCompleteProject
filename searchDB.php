@@ -198,7 +198,7 @@ function addToHistory($city) {
         $stmt->execute();
     } catch (PDOException $e) {
         echo $e->getMessage();
-        var_dump($e);
+       
     } finally {
         unset($pdo);
     }

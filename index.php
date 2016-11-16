@@ -64,7 +64,7 @@ if (isset($_POST['action']) == true && $_POST['action'] == 'register') {
     $pass = $_POST['password'];
 
 
-    
+
     if (checkUniqueUsername($user) == 1) {
         echo "<h2>Username or Password is invalid. Please try again</h2>";
     } else {//creates user and logs in, session
@@ -127,19 +127,19 @@ function checkLoginAndPassword($username, $pass) {
 
         //check counter ^
 
-
+      
         $stmt = $pdo->prepare("SELECT id,counter,pass from Users where user = ?");
 
         $stmt->bindParam(1, $username);
 
 
-        if ($stmt->execute()) {//if anything fails the ccounter needs to be updates to add 1
-
+        if ($stmt->execute()) {//if anything fails in here the counter needs to be updates to add 1
+           
             $row = $stmt->fetch();
             if ($row != null) { //if username exists
                 //check password
                 $passFromDB = $row['pass'];
-
+                
 
                 if (password_verify($pass, $passFromDB)) {  //right password so update coutner to 0
                     $stmt = $pdo->prepare("UPDATE Users set counter = ? where user = ?");
@@ -147,8 +147,16 @@ function checkLoginAndPassword($username, $pass) {
                     $stmt->bindValue(2, $username);
                     $stmt->execute();
                     return "logged in";
+                } else {
+                    $stmt = $pdo->prepare("UPDATE Users set counter = ? where user = ?");
+                    $stmt->bindValue(1, $counter + 1);
+                    $stmt->bindValue(2, $username);
+                    $stmt->execute();
+
+
+                    return "<h2>Username or Password is invalid. Please try again</h2>";
                 }
-            } else {
+            } else { //if the username doesnt exist
                 $stmt = $pdo->prepare("UPDATE Users set counter = ? where user = ?");
                 $stmt->bindValue(1, $counter + 1);
                 $stmt->bindValue(2, $username);
@@ -157,14 +165,6 @@ function checkLoginAndPassword($username, $pass) {
 
                 return "<h2>Username or Password is invalid. Please try again</h2>";
             }
-        } else { //if the username doesnt exist
-            $stmt = $pdo->prepare("UPDATE Users set counter = ? where user = ?");
-            $stmt->bindValue(1, $counter + 1);
-            $stmt->bindValue(2, $username);
-            $stmt->execute();
-
-
-            return "<h2>Username or Password is invalid. Please try again</h2>";
         }
         return "<h2>Username or Password is invalid. Please try again</h2>";
     } catch (PDOException $e) {
